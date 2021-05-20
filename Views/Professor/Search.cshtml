@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "Search results for \"" + ViewBag.search + "\"";
+}
+
+<br />
+<br />
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <h1 class="text-center">@ViewBag.Title</h1>
+        <br />
+    </div>
+</div>
+<br />
+
+@{
+    var itemCount = 0;
+}
+
+@foreach (var professor in ViewBag.Professors)
+{
+    if (itemCount % 3 == 0)
+    {
+        @Html.Raw("<div class='row'>")
+    }
+    <div class="col-lg-4">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h3 class="text-center"><strong> @Html.ActionLink(linkText: (string)professor.FirstName + " " + (string)professor.LastName, actionName: "Show", controllerName: "Professor", routeValues: new { id = professor.Id }, htmlAttributes: null)</strong></h3>
+            </div>
+        </div>
+    </div>
+    if (itemCount % 3 == 2)
+    {
+        @Html.Raw("</div>")
+    }
+    itemCount = itemCount + 1;
+}
+<div class="clearfix"></div>

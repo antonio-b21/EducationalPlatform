@@ -1,0 +1,40 @@
+﻿@model EducationalPlatform.Models.Section
+@{
+    ViewBag.Title2 = "Create section";
+}
+
+<br />
+<br />
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h1>@ViewBag.Title2</h1>
+    </div>
+
+    <div class="panel-body">
+        @using (Html.BeginForm(actionName: "New", controllerName: "Section"))
+        {
+            @Html.ValidationSummary(false, null, new { @class = "text-danger" })
+
+            <div class="form-group">
+                @Html.Label("Title", "Title")
+                @Html.TextBox("Title", null, new { @class = "form-control" })
+                @Html.ValidationMessage("Title", null, new { @class = "text-danger" })
+            </div>
+
+            @Html.Hidden("CourseId")
+
+            <div class="form-group">
+                @Html.Label("Course", "Course")
+                <input class="form-control" id="Course" type="text" value="@ViewBag.CourseTitle" readonly>
+                @Html.ValidationMessage("Course", null, new { @class = "text-danger" })
+            </div>
+
+            <button class="btn btn-default" type="submit">Create</button>
+        }
+    </div>
+</div>
+
+@{
+    ViewBag.Title = ViewBag.Title2;
+}

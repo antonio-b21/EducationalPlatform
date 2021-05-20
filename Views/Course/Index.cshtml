@@ -1,0 +1,56 @@
+﻿@{
+    ViewBag.Title = "Courses";
+}
+
+<br />
+<br />
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <h1 class="text-center">@ViewBag.Title</h1>
+        <br />
+
+        <div class="text-center">
+            <a class="btn btn-primary" href="/Course/New">Create course</a>
+            <div class="clearfix"></div>
+            <br />
+        </div>
+    </div>
+</div>
+<br />
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-info" role="alert">
+        @ViewBag.Message
+    </div>
+    <br />
+}
+
+@{
+    var itemCount = 0;
+}
+
+@foreach (var course in ViewBag.Courses)
+{
+    if (itemCount % 3 == 0)
+    {
+        @Html.Raw("<div class='row'>")
+    }
+    <div class="col-lg-4">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h3 class="text-center"><strong> @Html.ActionLink(linkText: (string)course.Title, actionName: "Show", controllerName: "Course", routeValues: new { id = course.Id }, htmlAttributes: null)</strong></h3>
+            </div>
+            <div class="panel-footer">
+                <h4 class="text-center"><b>Professor:</b> @Html.ActionLink(linkText: (string)course.Professor.FirstName + " " + (string)course.Professor.LastName, actionName: "Show", controllerName: "Professor", routeValues: new { id = course.ProfessorId }, htmlAttributes: null)</h4>
+            </div>
+        </div>
+    </div>
+    if (itemCount % 3 == 2)
+    {
+        @Html.Raw("</div>")
+    }
+    itemCount = itemCount + 1;
+}
+<div class="clearfix"></div>

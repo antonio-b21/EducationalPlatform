@@ -1,0 +1,147 @@
+﻿@model EducationalPlatform.Models.Course
+@{
+    ViewBag.Title2 = Model.Title.ToString() + " course";
+}
+
+<br />
+<br />
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h1 class="text-center"><strong>@ViewBag.Title2</strong></h1>
+    </div>
+
+    <div class="panel-body">
+        <h4><b>Professor:</b> @Html.ActionLink(linkText: (string)Model.Professor.FirstName + " " + (string)Model.Professor.LastName, actionName: "Show", controllerName: "Professor", routeValues: new { id = Model.ProfessorId }, htmlAttributes: null)</h4>
+
+        <h5>
+            <b>Students:</b>
+            @foreach (EducationalPlatform.Models.Student student in Model.Students)
+            {
+                @:•
+                @Html.ActionLink(linkText: (string)student.FirstName + " " + (string)student.LastName, actionName: "Show", controllerName: "Student", routeValues: new { id = student.Id }, htmlAttributes: null)
+            }
+        </h5>
+    </div>
+
+    @if (ViewBag.isAdmin || ViewBag.isAssignedProfessor)
+    {
+        <div class="panel-footer">
+            @if (ViewBag.isAssignedProfessor)
+            {
+                <div class="btn-group pull-left row">
+                    <div class="col-md-3">
+                        <a class="btn btn-primary" href="/Section/New/@Model.Id">New section</a>
+                    </div>
+                </div>
+            }
+
+
+            @if (ViewBag.isAdmin)
+            {
+                <div class="btn-group pull-right row">
+                    <div class="col-md-3">
+                        <a class="btn btn-warning" href="/Course/Edit/@Model.Id">Modify course</a>
+                    </div>
+                    <div class="col-md-2"></div>
+                    <div class="col-md-3">
+                        @using (Html.BeginForm(actionName: "Delete", controllerName: "Course", routeValues: new { Id = Model.Id }, method: FormMethod.Post))
+                        {
+                            @Html.HttpMethodOverride(HttpVerbs.Delete)
+                            <button class="btn btn-danger" type="submit">Delete course</button>
+                        }
+                    </div>
+                </div>
+            }
+
+            <div class="clearfix"></div>
+        </div>
+    }
+</div>
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success" role="alert">
+        @ViewBag.Message
+    </div>
+    <br />
+}
+
+@foreach (EducationalPlatform.Models.Section section in Model.Sections)
+{
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4><strong>@(section.Title)</strong></h4>
+        </div>
+
+        <div class="panel-body">
+            <ul class="list-group">
+                @foreach (EducationalPlatform.Models.Document document in section.Documents)
+                {
+                    <li class="list-group-item">
+                        <a class="btn btn-default glyphicon glyphicon-download-alt" href="/Document/Download/@(document.Id)"> @(document.Title).pdf</a>
+                        added by
+                        @Html.ActionLink(linkText: (string)Model.Professor.FirstName + " " + (string)Model.Professor.LastName, actionName: "Show", controllerName: "Professor", routeValues: new { id = Model.ProfessorId }, htmlAttributes: null)
+                        at
+                        @document.Date
+
+                        @if (ViewBag.isAdmin || ViewBag.isAssignedProfessor)
+                        {
+                            <div class="btn-group pull-right row">
+                                <div class="col-md-3">
+                                    @using (Html.BeginForm(actionName: "Edit", controllerName: "Document", routeValues: new { Id = document.Id }, method: FormMethod.Get))
+                                    {
+                                        <button class="btn glyphicon glyphicon-pencil" type="submit"> Modify</button>
+                                    }
+                                </div>
+                                <div class="col-md-2"></div>
+                                <div class="col-md-3">
+                                    @using (Html.BeginForm(actionName: "Delete", controllerName: "Document", routeValues: new { Id = document.Id }, method: FormMethod.Post))
+                                    {
+                                        @Html.HttpMethodOverride(HttpVerbs.Delete)
+                                        <button class="btn glyphicon glyphicon-erase" type="submit"> Delete</button>
+                                    }
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        }
+                    </li>
+                }
+            </ul>
+        </div>
+
+        @if (ViewBag.isAdmin || ViewBag.isAssignedProfessor)
+        {
+            <div class="panel-footer">
+                @if (ViewBag.isAssignedProfessor)
+                {
+                    <div class="btn-group pull-left row">
+                        <div class="col-md-3">
+                            <a class="btn btn-primary" href="/Document/New/@(section.Id)">New document</a>
+                        </div>
+                    </div>
+                }
+
+                <div class="btn-group pull-right row">
+                    <div class="col-md-3">
+                        <a class="btn btn-warning" href="/Section/Edit/@(section.Id)">Modify section</a>
+                    </div>
+                    <div class="col-md-2"></div>
+                    <div class="col-md-3">
+                        @using (Html.BeginForm(actionName: "Delete", controllerName: "Section", routeValues: new { Id = section.Id }, method: FormMethod.Post))
+                        {
+                            @Html.HttpMethodOverride(HttpVerbs.Delete)
+                            <button class="btn btn-danger" type="submit">Delete section</button>
+                        }
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+        }
+    </div>
+}
+
+@{
+    ViewBag.Title = ViewBag.Title2;
+}

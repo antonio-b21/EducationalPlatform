@@ -1,0 +1,50 @@
+﻿@model EducationalPlatform.Models.Course
+@{
+    ViewBag.Title2 = "Modify course";
+}
+
+<br />
+<br />
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h1>@ViewBag.Title2</h1>
+    </div>
+
+    <div class="panel-body">
+        @using (Html.BeginForm(actionName: "Edit", controllerName: "Course"))
+        {
+
+            @Html.HttpMethodOverride(HttpVerbs.Put)
+
+            @Html.ValidationSummary(false, null, new { @class = "text-danger" })
+
+            @Html.Hidden("Id")
+
+            <div class="form-group">
+                @Html.Label("Title", "Title")
+                @Html.Editor("Title", new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessage("Title", null, new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.Label("ProfessorId", "Professor")
+                @Html.DropDownList("ProfessorId", new SelectList(Model.Profs, "Value", "Text"), null, new { @class = "form-control inline" })
+                @Html.ValidationMessage("ProfessorId", null, new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.Label("StudentsIds", "Students")
+                @Html.ListBox("StudentsIds", new SelectList(Model.Studs, "Value", "Text"), new { @class = "form-control" })
+                @Html.ValidationMessage("StudentsIds", "", new { @class = "text-danger" })
+            </div>
+
+            <button class="btn btn-default" type="submit">Modify</button>
+
+        }
+    </div>
+</div>
+
+@{
+    ViewBag.Title = ViewBag.Title2;
+}

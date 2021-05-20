@@ -1,0 +1,70 @@
+﻿@model EducationalPlatform.Models.Professor
+@{
+    ViewBag.Title = Model.FirstName.ToString() + " " + Model.LastName.ToString() + "'s professor profile";
+}
+
+<br />
+<br />
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success" role="alert">
+        @ViewBag.Message
+    </div>
+    <br />
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h1 class="text-center"><strong>Professor profile</strong></h1>
+    </div>
+    <div class="panel-body">
+        <h4><b>First Name:</b> @Model.FirstName</h4>
+        <br />
+        <h4><b>Last Name:</b> @Model.LastName</h4>
+        <br />
+        <h4><b>Degree:</b> @Model.Degree</h4>
+        <br />
+    </div>
+    @if (ViewBag.currentUser == Model.Id)
+    {
+        <div class="panel-footer">
+            <a class="btn btn-warning" href="/Professor/Edit/@Model.Id">Modify profile</a>
+
+            @using (Html.BeginForm(actionName: "Delete", controllerName: "Professor", routeValues: new { Id = Model.Id }, method: FormMethod.Post, htmlAttributes: new { @class = "pull-right" }))
+            {
+                @Html.HttpMethodOverride(HttpVerbs.Delete)
+                <button class="btn btn-danger" type="submit">Delete profile</button>
+            }
+        </div>
+    }
+</div>
+
+@{
+    var itemCount = 0;
+}
+
+@if (ViewBag.currentUser == Model.Id || ViewBag.isAdmin)
+{
+    foreach (var course in Model.Courses)
+    {
+        if (itemCount % 3 == 0)
+        {
+            @Html.Raw("<div class='row'>")
+        }
+        <div class="col-lg-4">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h3 class="text-center"><strong> @Html.ActionLink(linkText: (string)course.Title, actionName: "Show", controllerName: "Course", routeValues: new { id = course.Id }, htmlAttributes: null)</strong></h3>
+                </div>
+            </div>
+        </div>
+        if (itemCount % 3 == 2)
+        {
+            @Html.Raw("</div>")
+        }
+        itemCount = itemCount + 1;
+    }
+}
+
+<div class="clearfix"></div>
